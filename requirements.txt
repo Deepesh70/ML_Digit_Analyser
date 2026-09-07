@@ -1,0 +1,18 @@
+# Core Machine Learning & Deep Learning
+tensorflow>=2.15.0
+emnist>=0.0
+
+# Numerical computing & Array manipulation
+numpy>=1.24.0
+
+# Image processing (resizing, grayscale conversion, padding)
+pillow>=10.0.0
+
+# Data visualization & Evaluation plots (confusion matrix, loss curves)
+matplotlib>=3.8.0
+seaborn>=0.13.0
+scikit-learn>=1.4.0
+
+# Interactive Web Application & Drawing Canvas
+streamlit>=1.32.0
+streamlit-drawable-canvas>=0.9.3
