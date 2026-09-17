@@ -25,6 +25,11 @@ if str(ROOT_DIR) not in sys.path:
 
 import tensorflow as tf
 from src.preprocess import preprocess_digit_image
+from src.analyser import (
+    analyze_stroke_geometry,
+    analyze_multi_angle_predictions,
+    get_geometry_advisory,
+)
 from streamlit_drawable_canvas import st_canvas
 
 # Page configuration
@@ -126,6 +131,14 @@ def main():
                     predicted_digit = int(np.argmax(probabilities))
                     confidence = float(probabilities[predicted_digit]) * 100
 
+                    # Run Senior Developer Diagnostic Analysis
+                    geometry = analyze_stroke_geometry(raw_drawing)
+                    angle_results = analyze_multi_angle_predictions(raw_drawing, model)
+                    advisory = get_geometry_advisory(geometry, angle_results)
+
+                    if advisory["has_advisory"]:
+                        st.warning(advisory["message"])
+
                     # Display Top Prediction
                     st.metric(
                         label="Predicted Digit",
@@ -151,6 +164,19 @@ def main():
                         "Probability (%)": probabilities * 100
                     }).set_index("Digit")
                     st.bar_chart(chart_df, color="#3b82f6")
+
+                    # Multi-Angle Orientation Inspector
+                    with st.expander("🔄 Multi-Angle Rotation Inspector (Diagnostic)", expanded=geometry["is_unusual_aspect"]):
+                        st.caption(
+                            "Tests the drawing across multiple rotation angles to diagnose sideways or tilted handwriting."
+                        )
+                        cols_ang = st.columns(len(angle_results))
+                        for col, res in zip(cols_ang, angle_results):
+                            with col:
+                                st.caption(f"**{res['label']}**")
+                                st.image(res["preview_28x28"], width=75, clamp=True)
+                                st.markdown(f"**Digit {res['predicted_digit']}**")
+                                st.caption(f"{res['confidence']:.1f}%")
 
     # ==========================================
     # TAB 2: IMAGE UPLOAD

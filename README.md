@@ -99,6 +99,7 @@ ML_Digit_Analyser/
     ├── __init__.py
     ├── model.py             # CNN architecture definition
     ├── preprocess.py        # Image centering, inversion & bounding-box scaling
+    ├── analyser.py          # Stroke geometry analysis & multi-angle rotation diagnostics
     ├── train.py             # Full training pipeline with data augmentation & callbacks
     └── evaluate.py          # Diagnostic evaluation suite
 ```
